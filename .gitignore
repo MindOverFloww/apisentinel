@@ -1,0 +1,30 @@
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+
+# Java / Backend
+backend/target/
+backend/.idea/
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/*.log
+backend/.env
+backend/.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# General
+*.log
