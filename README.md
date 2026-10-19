@@ -3,28 +3,31 @@
 <div align="center">
 
 ![API Sentinel Banner](https://img.shields.io/badge/API_SENTINEL-v1.4.0_SOC-0A0A0A?style=for-the-badge&logo=shield&logoColor=white)
-![Build Status](https://img.shields.io/badge/Build-Passing-10B981?style=for-the-badge&logo=githubactions&logoColor=white)
+![Deployment Vercel](https://img.shields.io/badge/Vercel_Live-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Deployment Netlify](https://img.shields.io/badge/Netlify_Mirror-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)
+![Backend Render](https://img.shields.io/badge/Render_Backend-46E3B7?style=for-the-badge&logo=render&logoColor=black)
+![Database Supabase](https://img.shields.io/badge/Supabase_PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![Java](https://img.shields.io/badge/Java_21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![React](https://img.shields.io/badge/React_18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript_5.5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite_5.4-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
 <p align="center">
   <b>Autonomous, Real-Time API Intrusion Detection, Velocity Analytics & Security Operations Center (SOC)</b>
 </p>
 
 <p align="center">
-  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-live-cloud-deployments">Live Deployments</a> •
   <a href="#-default-credentials">Credentials</a> •
   <a href="#-interactive-packet-flow-simulator">Flow Simulator</a> •
-  <a href="#-system-architecture">Architecture</a> •
+  <a href="#-cloud-system-architecture">Architecture</a> •
   <a href="#-end-to-end-data-flow">Data Flow</a> •
   <a href="#-control-flow--decision-tree">Control Flow</a> •
   <a href="#-risk-scoring-engine">Risk Engine</a> •
-  <a href="#-attack-simulation-lab">Live Attacks</a> •
-  <a href="#-api-reference">API Docs</a>
+  <a href="#-attack-simulation-lab-live-cloud-testing">Live Attacks</a> •
+  <a href="#-rest-api-specification-reference">API Docs</a> •
+  <a href="#-local-development-setup-optional">Local Setup</a>
 </p>
 
 </div>
@@ -33,102 +36,59 @@
 
 > [!NOTE]
 > **One-Sentence Platform Overview:**  
-> **API Sentinel** is an enterprise-grade API Security & Intrusion Detection System (IDS) that intercepts incoming REST traffic, extracts granular security metadata, detects active threats using deterministic velocity and signature rules, evaluates composite mathematical risk scores (0–100), and provides an ultra-low latency glassmorphism SOC dashboard for incident triage.
+> **API Sentinel** is an enterprise-grade API Security & Intrusion Detection System (IDS) deployed in the cloud. It intercepts incoming REST traffic, extracts granular security metadata, detects active threats using deterministic velocity and signature rules, evaluates composite mathematical risk scores (0–100), and provides an ultra-low latency glassmorphism SOC dashboard for incident triage.
 
 ---
 
-## ⚡ Quick Start
+## 🌐 Live Cloud Deployments
 
-Launch both the **Backend Engine** and **Frontend SOC Dashboard** with a single command:
-
-### Option A: One-Click Launchers (Recommended)
-
-| Platform | Command / Action | Description |
-|---|---|---|
-| **Windows (Double-Click)** | Double-click [`run.bat`](file:///c:/java%20project/Sentinel-API/run.bat) | Auto-builds & boots Backend + Frontend in parallel |
-| **Windows (PowerShell)** | `.\run.ps1` | Orchestrates processes with formatted status output |
-| **Linux / macOS / WSL** | `chmod +x run.sh && ./run.sh` | Bash runner with port cleanup & health probes |
-| **Node.js (Cross-Platform)** | `npm run dev` | Concurrently launches backend JAR & Vite dev server |
-
-### Option B: Standalone Processes
-
-<details>
-<summary><b>▶️ Click to expand Backend standalone commands</b></summary>
-
-```bash
-# Using Maven Wrapper (Java 21):
-cd backend
-./mvnw spring-boot:run
-
-# Or run pre-built JAR:
-java -jar backend/target/api-0.0.1-SNAPSHOT.jar
-```
-*(Or double-click [`start-backend.bat`](file:///c:/java%20project/Sentinel-API/start-backend.bat))*
-
-</details>
-
-<details>
-<summary><b>▶️ Click to expand Frontend standalone commands</b></summary>
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-*(Or double-click [`start-frontend.bat`](file:///c:/java%20project/Sentinel-API/start-frontend.bat))*
-
-</details>
-
-### 🌐 System Service Endpoints
-
-Once booted, the following services will be live:
+API Sentinel is fully hosted and accessible across high-availability cloud platforms:
 
 ```
-┌──────────────────────────────────────┬───────────────────────────────┐
-│ Service Component                    │ Endpoint URL                  │
-├──────────────────────────────────────┼───────────────────────────────┤
-│ 🖥️  SOC Frontend Web UI              │ http://localhost:5173         │
-│ 🛡️  Backend REST API Engine          │ http://localhost:8080         │
-│ 🗄️  H2 Persistent Database Console   │ http://localhost:8080/h2-console│
-│ 🩺 Health & Readiness Actuator      │ http://localhost:8080/actuator│
-└──────────────────────────────────────┴───────────────────────────────┘
+┌──────────────────────────────────────┬────────────────────────────────────────────────────────┐
+│ Service Component                    │ Production Cloud Endpoint URL                          │
+├──────────────────────────────────────┼────────────────────────────────────────────────────────┤
+│ ⚡ SOC Frontend (Vercel Primary)      │ https://apisentinel-azure.vercel.app                  │
+│ 🌐 SOC Frontend (Netlify Mirror)     │ https://apisentinelids.netlify.app                    │
+│ 🛡️ Backend Engine (Render Service)   │ https://api-sentinel-backend-s0ev.onrender.com         │
+│ 🔌 Public REST API Target            │ https://api-sentinel-backend-s0ev.onrender.com/api     │
+│ 🗄️ Managed Cloud Database            │ Supabase PostgreSQL 16 (AWS Pooler over SSL)          │
+└──────────────────────────────────────┴────────────────────────────────────────────────────────┘
 ```
 
-> **H2 Console Connection Info:**  
-> - **Driver:** `org.h2.Driver`  
-> - **JDBC URL:** `jdbc:h2:file:./data/sentineldb`  
-> - **User:** `sa` | **Password:** *(empty)*
+> [!TIP]
+> **Render Cold Start Notice:** Render free tier instances spin down after inactivity. On initial visit, the first request may take 30–50 seconds to boot the Spring Boot container. Subsequent requests execute in real time (<50ms).
 
 ---
 
 ## 🔐 Default Credentials
 
-API Sentinel ships with ready-to-test role-based accounts initialized via [`AdminBootstrapRunner.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/config/AdminBootstrapRunner.java):
+API Sentinel ships with pre-configured role-based test accounts:
 
 ```
 ┌───────────────────────┬──────────────┬──────────────┬─────────────────────────────────────────────────┐
 │ Role Level            │ Username     │ Password     │ Access Permissions & Scope                      │
 ├───────────────────────┼──────────────┼──────────────┼─────────────────────────────────────────────────┤
-│ 👑 Administrator      │ admin        │ null         │ Full System Control, Rules Tuning, RBAC Users   │
-│ 🔍 Security Analyst   │ analyst      │ null         │ Incident Triage, Status Lifecycle, Traffic Logs │
-│ 👁️ Auditor / Viewer   │ viewer       │ null         │ Read-Only Metrics, Telemetry & Dashboard View   │
+│ 👑 Administrator      │ admin        │ admin123     │ Full System Control, Rules Tuning, RBAC Users   │
+│ 🔍 Security Analyst   │ analyst      │ analyst123   │ Incident Triage, Status Lifecycle, Traffic Logs │
+│ 👁️ Auditor / Viewer   │ viewer       │ viewer123    │ Read-Only Metrics, Telemetry & Dashboard View   │
 └───────────────────────┴──────────────┴──────────────┴─────────────────────────────────────────────────┘
 ```
 
 > [!TIP]
-> The sign-in page ([`LoginPage.tsx`](file:///c:/java%20project/Sentinel-API/frontend/src/pages/LoginPage.tsx)) features **Quick Account Selection Chips** (`Admin`, `Analyst`, `Viewer`). Clicking any chip instantly pre-fills the credentials!
+> The live console login page features **Evaluator Quick Logins** (`Admin`, `Analyst`, `Viewer`). Clicking any chip automatically pre-fills the credentials and connects directly to the Render cloud backend!
 
 ---
 
 ## 🎯 What Problem Does API Sentinel Solve?
 
-Modern distributed applications expose hundreds of REST endpoints. Traditional network firewalls only inspect IP headers, while Web Application Firewalls (WAFs) struggle to correlate multi-request behavioral patterns. 
+Modern distributed web architectures expose numerous public REST APIs. Traditional network firewalls only inspect raw TCP/IP headers, while typical Web Application Firewalls (WAFs) struggle to correlate multi-request behavioral patterns across time.
 
-Threat actors leverage API-specific attack vectors:
+API Sentinel actively mitigates high-impact API attack vectors:
 
 | Attack Vector | Mechanism | Real-World Impact | How API Sentinel Mitigates It |
 |---|---|---|---|
-| **SQL Injection (SQLi)** | Tautologies (`' OR '1'='1`), stacked queries, comments, `UNION SELECT` | Unauthorized DB exfiltration, bypass auth | Instant regex AST signature scanning in query params & body payloads |
+| **SQL Injection (SQLi)** | Tautologies (`' OR '1'='1`), stacked queries, comments, `UNION SELECT` | Unauthorized DB exfiltration, authentication bypass | Instant regex AST signature scanning in query params & body payloads |
 | **Brute Force & Credential Stuffing** | Rapid 401 velocity targeting `/api/auth/login` | Account takeover, credential dumping | Rolling 60s sliding window threshold (>5 fails = Critical Incident) |
 | **API Abuse & Scraping** | High-concurrency requests (>100 req/min) | Denial of Service (DoS), business logic abuse | Per-IP request velocity monitoring with exponential risk weighting |
 | **ID Enumeration** | Sequential traversal across numeric entity IDs | Bulk private data harvesting | Behavioral velocity and anomalous path dispersion tracking |
@@ -137,23 +97,23 @@ Threat actors leverage API-specific attack vectors:
 
 ## 🎮 Interactive Packet Flow Simulator
 
-Click each scenario below to inspect how the system evaluates different requests, step by step:
+Click each scenario below to inspect how the live system evaluates requests:
 
 <details open>
 <summary><b>🟢 Scenario 1: Legitimate API Traffic (Pass-Through)</b></summary>
 
 ```
-[Client] ──HTTP GET /api/demo/products──▶ [Security Filter] ──Passed──▶ [ApiEvent Ingest]
-                                                                               │
-[Database: Normal Telemetry] ◀──Score: 0 (Normal)── [Detection Engine: 0 Matches] ◀──┘
+[Client / Browser] ──HTTP GET /api/demo/products──▶ [Render Security Gateway] ──Passed──▶ [ApiEvent Ingest]
+                                                                                                │
+[Supabase DB: Normal Telemetry] ◀──Score: 0 (Normal)── [Detection Engine: 0 Matches] ◀──────────┘
 ```
 
 1. **Client Request:** `GET /api/demo/products?category=electronics`
-2. **Security Gateway:** Validates session / rate bounds $\to$ Allowed.
-3. **Ingestion:** Normalized into an `ApiEvent` (Latency: 28ms, Status: 200).
+2. **Security Gateway:** Verifies session / origin bounds $\to$ Allowed.
+3. **Ingestion:** Normalized into an `ApiEvent` (Latency: ~35ms, Status: 200).
 4. **Detection Engine:** SQLi regex scan (negative), Brute force count (0), Velocity (within threshold).
 5. **Risk Score:** `0` $\to$ Classification: **🟢 NORMAL**.
-6. **Result:** Telemetry stored in database. No incident generated.
+6. **Result:** Telemetry stored in Supabase PostgreSQL. No incident generated.
 
 </details>
 
@@ -167,21 +127,21 @@ Click each scenario below to inspect how the system evaluates different requests
 [Incident INC-101 (MEDIUM: 30)] ◀──Score: 30── [Regex Match: SQL_INJECTION_PATTERN]
         │
         ▼
-[SOC Dashboard Radar Alert]
+[Vercel/Netlify SOC Threat Radar]
 ```
 
 1. **Malicious Query:** `GET /api/demo/products?search=%27%20OR%20%271%27=%271`
 2. **Ingestion:** Encoded parameters decoded and parsed into `ApiEvent`.
-3. **Detection Engine ([`DetectionService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/DetectionService.java)):**
+3. **Detection Engine ([`DetectionService.java`](file:///c:/java%20project/apisentinel/backend/src/main/java/com/sentinel/api/service/DetectionService.java)):**
    - Matches regex: `('|\")\s*or\s+('?\d+'?|'?[a-zA-Z]+'?)\s*=\s*('?\d+'?|'?[a-zA-Z]+'?)`
    - Generates `DetectionResult` with type `SQL_INJECTION_PATTERN`.
-4. **Risk Scoring ([`RiskScoringService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/RiskScoringService.java)):**
+4. **Risk Scoring ([`RiskScoringService.java`](file:///c:/java%20project/apisentinel/backend/src/main/java/com/sentinel/api/service/RiskScoringService.java)):**
    - Base contribution: `+30 points`.
    - Score: `30` $\to$ Severity: **🟡 MEDIUM**.
-5. **Incident Service ([`IncidentService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/IncidentService.java)):**
-   - Deduplicates or creates `Incident` `INC-101`.
+5. **Incident Service ([`IncidentService.java`](file:///c:/java%20project/apisentinel/backend/src/main/java/com/sentinel/api/service/IncidentService.java)):**
+   - Deduplicates or creates `Incident`.
    - Factors JSON: `[{"factor": "SQL injection-like input detected", "points": 30}]`.
-6. **Result:** Instantly surfaces on SOC Threat Radar and Incidents table.
+6. **Result:** Instantly surfaces on the SOC Threat Radar and Incidents table on Vercel/Netlify.
 
 </details>
 
@@ -198,9 +158,9 @@ Click each scenario below to inspect how the system evaluates different requests
 [SOC Critical Flash Alert] ◀──Score: 70 (HIGH)── [Risk: 50 Base + 20 Auth Context]
 ```
 
-1. **Attack Pattern:** Bot fires 7 rapid login requests with incorrect credentials within 10 seconds.
+1. **Attack Pattern:** Threat actor fires rapid login requests with incorrect credentials within 10 seconds.
 2. **Detection Evaluation:**
-   - Evaluator counts failed logins for IP `192.168.1.100` within a rolling 60-second window.
+   - Evaluator counts failed logins for client IP within rolling 60-second window.
    - Count ($7$) exceeds threshold ($5$).
    - Rule `BRUTE_FORCE` is triggered.
 3. **Risk Scoring:**
@@ -232,84 +192,80 @@ Click each scenario below to inspect how the system evaluates different requests
 
 ---
 
-## 🏛️ System Architecture
-
-> 💡 **Interactive Diagram:** Click on **any node** below in your browser or Markdown viewer to jump directly to its code implementation!
+## 🏛️ Cloud System Architecture
 
 ```mermaid
 graph TB
-    subgraph ClientLayer["🖥️ Presentation & SOC Layer (Frontend)"]
-        UI["React 18 + TypeScript + Vite"]
-        Dashboard["Dashboard Overview & Radar"]
-        TrafficView["Live Traffic Inspector"]
-        IncidentTriage["Incident Management & Status"]
-        RulesManager["Rule Config & Threshold Editor"]
-        UsersAdmin["RBAC User Management"]
-        UI --> Dashboard
-        UI --> TrafficView
-        UI --> IncidentTriage
-        UI --> RulesManager
-        UI --> UsersAdmin
+    subgraph ClientCloud["⚡ Global CDN & Presentation Layer"]
+        Vercel["Vercel Hosted App\nhttps://apisentinel-azure.vercel.app"]
+        Netlify["Netlify Hosted Mirror\nhttps://apisentinelids.netlify.app"]
+        Dashboard["Dashboard Overview & Threat Radar"]
+        TrafficView["Live Traffic Telemetry Inspector"]
+        IncidentTriage["Incident Lifecycle Management"]
+        RulesManager["Dynamic Rules & Threshold Tuning"]
+        UsersAdmin["RBAC User IAM Administration"]
+        
+        Vercel --> Dashboard & TrafficView & IncidentTriage & RulesManager & UsersAdmin
+        Netlify --> Dashboard & TrafficView & IncidentTriage & RulesManager & UsersAdmin
     end
 
-    subgraph SecurityGateway["🔒 Security & Ingestion Layer"]
-        SecFilter["Spring Security 6 Filter Chain"]
+    subgraph SecurityGateway["🔒 Cloud Gateway & Security Filter (Render)"]
+        CORS["CORS Policy Engine\n(Vercel, Netlify & Wildcards Allowed)"]
+        SecFilter["Spring Security 6 Stateless Filter"]
         JWT["HMAC-SHA384 JWT Token Validator"]
-        EventInterceptor["API Event Interceptor & Logger"]
-        SecFilter --> JWT
-        JWT --> EventInterceptor
+        EventInterceptor["API Event Telemetry Interceptor"]
+        
+        CORS --> SecFilter --> JWT --> EventInterceptor
     end
 
-    subgraph CoreEngine["⚙️ Processing & Detection Engine (Backend)"]
+    subgraph CoreEngine["⚙️ Processing & Detection Engine (Render Web Service)"]
         EventService["ApiEventService (Ingest & Normalize)"]
-        DetectService["DetectionService (Velocity & Rule Matching)"]
-        RiskService["RiskScoringService (Additive Scoring Engine)"]
-        IncidentService["IncidentService (Deduplication & Alerts)"]
+        DetectService["DetectionService (Sliding 60s Windows & Regex)"]
+        RiskService["RiskScoringService (Composite Scoring 0-100)"]
+        IncidentService["IncidentService (Deduplication & Lifecycle)"]
         
         EventService --> DetectService
         DetectService --> RiskService
         RiskService --> IncidentService
     end
 
-    subgraph StorageLayer["🗄️ Persistence Layer"]
-        H2Local[("H2 Database (Persistent PostgreSQL Mode)")]
-        PostgresCloud[("PostgreSQL (Supabase / Neon / RDS)")]
+    subgraph PersistenceCloud["🗄️ Managed Cloud Database Layer"]
+        Supabase[("Supabase PostgreSQL 16\nTransaction Pooler with SSL")]
     end
 
-    UI -->|REST API over HTTP/JSON| SecFilter
+    Vercel -->|HTTPS / REST API + JWT| CORS
+    Netlify -->|HTTPS / REST API + JWT| CORS
     EventInterceptor --> EventService
-    IncidentService -->|JPA / Hibernate| H2Local
-    IncidentService -.->|Optional Cloud JDBC| PostgresCloud
+    IncidentService -->|JDBC over SSL| Supabase
+    EventService -->|JDBC over SSL| Supabase
 ```
 
-| Layer | Component | Description | Source File |
+| Layer | Component | Cloud Host / Tech | Source File |
 |---|---|---|---|
-| **Presentation** | React SOC Dashboard | Real-time threat radar & incident triage | [`DashboardPage.tsx`](file:///c:/java%20project/Sentinel-API/frontend/src/pages/DashboardPage.tsx) |
-| **Presentation** | Traffic Inspector | Searchable live HTTP telemetry table | [`TrafficPage.tsx`](file:///c:/java%20project/Sentinel-API/frontend/src/pages/TrafficPage.tsx) |
-| **Presentation** | Rules Manager | Velocity threshold & detection toggles | [`RulesPage.tsx`](file:///c:/java%20project/Sentinel-API/frontend/src/pages/RulesPage.tsx) |
-| **Presentation** | RBAC Users Admin | User provisioning & credentials control | [`UsersPage.tsx`](file:///c:/java%20project/Sentinel-API/frontend/src/pages/UsersPage.tsx) |
-| **Gateway** | Security Filter Chain | JWT validation & route access bounds | [`SecurityConfig.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/config/SecurityConfig.java) |
-| **Gateway** | JWT Auth Provider | HMAC-SHA384 cryptographic token service | [`JwtService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/security/JwtService.java) |
-| **Processing** | Ingestion Service | Normalizes HTTP headers & latency metrics | [`ApiEventService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/ApiEventService.java) |
-| **Detection** | Detection Engine | Rolling 60s windows & SQLi regex rules | [`DetectionService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/DetectionService.java) |
-| **Scoring** | Risk Scoring Engine | Additive composite score (0–100) formula | [`RiskScoringService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/RiskScoringService.java) |
-| **Alerting** | Incident Service | Incident deduplication & lifecycle state | [`IncidentService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/IncidentService.java) |
+| **Presentation** | SOC Cyber Console | Vercel (`React 18 + Vite`) | [`DashboardPage.tsx`](file:///c:/java%20project/apisentinel/frontend/src/pages/DashboardPage.tsx) |
+| **Presentation** | Mirror Deployment | Netlify Edge CDN | [`apisentinelids.netlify.app`](https://apisentinelids.netlify.app) |
+| **Presentation** | Live Traffic Inspector | Virtualized Table + Filters | [`TrafficPage.tsx`](file:///c:/java%20project/apisentinel/frontend/src/pages/TrafficPage.tsx) |
+| **Presentation** | Rules Configuration | Interactive Thresholds | [`RulesPage.tsx`](file:///c:/java%20project/apisentinel/frontend/src/pages/RulesPage.tsx) |
+| **Presentation** | RBAC Administration | IAM Roles & Users | [`UsersPage.tsx`](file:///c:/java%20project/apisentinel/frontend/src/pages/UsersPage.tsx) |
+| **Gateway** | Security Filter & CORS | Spring Security 6 on Render | [`SecurityConfig.java`](file:///c:/java%20project/apisentinel/backend/src/main/java/com/sentinel/api/config/SecurityConfig.java) |
+| **Gateway** | Cryptographic Auth | HMAC-SHA384 Tokens | [`JwtService.java`](file:///c:/java%20project/apisentinel/backend/src/main/java/com/sentinel/api/security/JwtService.java) |
+| **Detection** | Signature & Velocity Engine | Rolling 60s Sliding Windows | [`DetectionService.java`](file:///c:/java%20project/apisentinel/backend/src/main/java/com/sentinel/api/service/DetectionService.java) |
+| **Scoring** | Risk Scoring Engine | Additive Score (0–100) | [`RiskScoringService.java`](file:///c:/java%20project/apisentinel/backend/src/main/java/com/sentinel/api/service/RiskScoringService.java) |
+| **Persistence** | Relational Store | Supabase Managed PostgreSQL | [`seed_users.sql`](file:///c:/java%20project/apisentinel/backend/src/main/resources/seed_users.sql) |
 
 ---
 
 ## 🔄 End-to-End Data Flow
 
-From the instant an HTTP request touches an endpoint to its visualization on the SOC radar:
-
 ```mermaid
 flowchart TD
-    A["🌐 Incoming HTTP Request\n(e.g., GET /api/demo/products?search=' OR '1'='1)"] --> B["🛡️ Security Filter Chain\nVerify JWT / Rate Bounds"]
+    A["🌐 Incoming HTTP Request\n(Client to https://api-sentinel-backend-s0ev.onrender.com)"] --> B["🛡️ Security Filter Chain & CORS Validation"]
     B --> C["📦 API Event Normalization\nCapture IP, Latency, Method, Path, Params, Body, User-Agent"]
-    C --> D[("💾 Persist ApiEvent\n(Stored in DB)")]
+    C --> D[("💾 Persist ApiEvent to Supabase PostgreSQL")]
     
     D --> E["⚡ Detection Engine Evaluation\n(DetectionService.evaluateEvent)"]
     
-    subgraph RuleEvaluation["Rule Evaluator Matrix"]
+    subgraph RuleEvaluation["Active Evaluation Matrix"]
         E --> F1{"Rule 1: Brute Force\nFailed logins > 5 in 60s?"}
         E --> F2{"Rule 2: SQL Injection\nMatches SQLi regex signatures?"}
         E --> F3{"Rule 3: API Abuse\nRequests > 100 in 60s from IP?"}
@@ -323,67 +279,49 @@ flowchart TD
     H --> I{"Score >= 30?"}
     
     I -->|No| J["Mark Event Normal (Telemetry Only)"]
-    I -->|Yes| K["🚨 Incident Creation / Deduplication\n(IncidentService)"]
+    I -->|Yes| K["🚨 Incident Creation & Deduplication\n(IncidentService)"]
     
-    K --> L[("💾 Persist Incident\n(factors, severity, riskScore)")]
-    L --> M["📊 Broadcast Telemetry\nAvailable in Frontend Dashboard & Traffic Inspector"]
+    K --> L[("💾 Persist Incident in Supabase\n(factors, severity, riskScore)")]
+    L --> M["📊 Real-Time Telemetry Broadcast\nSurfaced on Vercel & Netlify SOC Dashboards"]
 ```
-
-| Pipeline Step | Description | Entity / Service Reference |
-|---|---|---|
-| **Event Ingestion** | Captures method, path, latency, IP, body | [`ApiEvent.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/entity/ApiEvent.java) |
-| **Detection Evaluation** | AST pattern matching & sliding 60s velocity | [`DetectionService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/DetectionService.java) |
-| **Risk Calculation** | Additive scoring + context multipliers | [`RiskScoringService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/RiskScoringService.java) |
-| **Incident Deduplication** | Correlates alerts and manages lifecycle | [`IncidentService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/IncidentService.java) |
 
 ---
 
 ## 🔀 Control Flow & Decision Tree
 
-Trace how requests move across layers, when rules fire, and how incidents are deduplicated:
-
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Attacker as Threat Actor / Client
-    participant Controller as DemoController / Endpoints
+    actor Attacker as Threat Actor / Terminal
+    participant Render as Render API Gateway
     participant EventService as ApiEventService
     participant DetectService as DetectionService
     participant RiskEngine as RiskScoringService
     participant IncService as IncidentService
-    participant SOC as Frontend Dashboard
+    participant VercelUI as Vercel / Netlify SOC Console
 
-    Attacker->>Controller: POST /api/demo/login (Bad Credentials)
-    Controller->>EventService: recordEvent(ApiEvent: statusCode=401, IP=192.168.1.100)
+    Attacker->>Render: POST /api/demo/login (Bad Credentials)
+    Render->>EventService: recordEvent(ApiEvent: statusCode=401, IP=203.0.113.19)
     EventService->>DetectService: evaluateEvent(event)
     
-    Note over DetectService: Query rolling 60s window from DB<br/>count = 6 failed logins for IP
+    Note over DetectService: Query Supabase rolling 60s window<br/>count = 6 failed logins from IP
     DetectService->>DetectService: Trigger BRUTE_FORCE rule
     
     DetectService->>RiskEngine: calculateScore([BRUTE_FORCE], Context)
-    Note over RiskEngine: Base: +50 pts<br/>High Auth Failure Context: +20 pts<br/>Total: 70 pts (Severity: HIGH)
+    Note over RiskEngine: Base: +50 pts<br/>Auth Failure Context: +20 pts<br/>Total: 70 pts (Severity: HIGH)
     RiskEngine-->>DetectService: RiskAssessment(score=70, severity=HIGH)
     
     DetectService->>IncService: handleDetections(event, detections, assessment)
-    Note over IncService: Check active incident for IP<br/>Deduplicate or update score & timestamp
-    IncService-->>SOC: Incident Available on Next Poll / Refresh
-    SOC-->>SOC: Render Critical Flash & Incident Details Modal
+    Note over IncService: Check active incident for IP<br/>Deduplicate or escalate score
+    IncService-->>VercelUI: Incident Telemetry Broadcasted
+    VercelUI-->>VercelUI: Pulse Threat Radar & Highlight Red Alert
 ```
-
-| Sequence Participant | Layer Role | Implementation Class |
-|---|---|---|
-| **DemoController** | Simulation & Honeypot Endpoint | [`DemoController.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/controller/DemoController.java) |
-| **ApiEventService** | Ingestion & Telemetry Normalizer | [`ApiEventService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/ApiEventService.java) |
-| **DetectionService** | Multi-rule Signature & Velocity Engine | [`DetectionService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/DetectionService.java) |
-| **RiskScoringService** | Mathematical Composite Risk Calculator | [`RiskScoringService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/RiskScoringService.java) |
-| **IncidentService** | Incident Deduplication & State Tracking | [`IncidentService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/IncidentService.java) |
-| **Frontend SOC** | Real-Time Glassmorphism UI Radar | [`DashboardPage.tsx`](file:///c:/java%20project/Sentinel-API/frontend/src/pages/DashboardPage.tsx) |
 
 ---
 
 ## 🧮 Risk Scoring Engine & Formula
 
-The [`RiskScoringService.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/service/RiskScoringService.java) calculates a non-linear, multi-variable score bounded in $[0, 100]$:
+The [`RiskScoringService.java`](file:///c:/java%20project/apisentinel/backend/src/main/java/com/sentinel/api/service/RiskScoringService.java) computes a mathematical risk score strictly bounded in $[0, 100]$:
 
 $$\text{Risk Score} = \min\left(100, \sum \text{Base Points} + \sum \text{Context Boosts}\right)$$
 
@@ -416,178 +354,101 @@ graph LR
 
 ---
 
-## 🧪 Attack Simulation Lab (Live Testing)
+## 🧪 Attack Simulation Lab (Live Cloud Testing)
 
-Sentinel contains a built-in interactive honeypot/simulation controller ([`DemoController.java`](file:///c:/java%20project/Sentinel-API/backend/src/main/java/com/sentinel/api/controller/DemoController.java)). Try these attacks from your terminal:
+Sentinel features built-in simulation endpoints to trigger real-time detection on the live cloud instance. You can execute these commands directly from your terminal:
 
 ### 1. SQL Injection Attack
 
-Inject a tautological SQL exploit into the catalog search:
+Send a boolean tautology query probe against the catalog search:
 
 ```bash
-# Live Vercel Endpoint:
-curl "https://apisentinel-azure.vercel.app/api/demo/products?search=%27%20OR%20%271%27=%271"
+# cURL (Bash / Terminal):
+curl "https://api-sentinel-backend-s0ev.onrender.com/api/demo/products?search=%27%20OR%20%271%27=%271"
 
-# Localhost Endpoint:
-curl "http://localhost:8081/api/demo/products?search=%27%20OR%20%271%27=%271"
-
-# Or UNION SELECT attack:
-curl "https://apisentinel-azure.vercel.app/api/demo/products?search=1%20UNION%20SELECT%20null,username,password%20FROM%20users--"
+# PowerShell (Windows):
+Invoke-RestMethod -Uri "https://api-sentinel-backend-s0ev.onrender.com/api/demo/products?search=%27%20OR%20%271%27=%271" -Method GET
 ```
 
-**Observation:**
-- **Status:** Triggered immediately (`SQL_INJECTION_PATTERN`).
-- **Severity:** `MEDIUM` (Score: 30) or `HIGH` if combined with velocity.
-- **Factor:** `"SQL injection-like input detected"`.
+**Live Observation:**
+- **Trigger:** Immediate regex match (`SQL_INJECTION_PATTERN`).
+- **Severity:** `MEDIUM` (Score: 30).
+- **Console Feed:** Surfaces on [apisentinel-azure.vercel.app](https://apisentinel-azure.vercel.app) under Incidents.
 
 ---
 
 ### 2. High-Frequency Brute Force Attack
 
-Run a rapid burst of failed credential attempts against the demo authentication gateway:
+Execute a rapid burst of failed authentication attempts:
 
 ```bash
-# Linux / macOS / Git Bash (Live Vercel / Cloud):
+# Linux / macOS / Git Bash:
 for i in {1..7}; do
-  curl -s -X POST https://apisentinel-azure.vercel.app/api/demo/login \
+  curl -s -X POST https://api-sentinel-backend-s0ev.onrender.com/api/demo/login \
        -H "Content-Type: application/json" \
-       -d '{"username":"admin","password":"wrong_password_'$i'"}'
+       -d '{"username":"admin","password":"invalid_password_'$i'"}'
 done
 
 # PowerShell (Windows):
 1..7 | ForEach-Object {
-    Invoke-RestMethod -Uri "https://apisentinel-azure.vercel.app/api/demo/login" -Method POST `
+    Invoke-RestMethod -Uri "https://api-sentinel-backend-s0ev.onrender.com/api/demo/login" -Method POST `
         -ContentType "application/json" -Body "{`"username`":`"admin`",`"password`":`"bad_pass_$_`"}" `
         -SkipHttpErrorCheck
 }
 ```
 
-**Observation:**
-- **Status:** Evaluator registers $>5$ 401 status codes in 60s.
+**Live Observation:**
+- **Trigger:** $>5$ failed attempts recorded within 60 seconds.
 - **Severity:** Escalates to `HIGH` / `CRITICAL` (Score: 70–90).
-- **Factor:** `"Brute-force behavior"` + `"High authentication-failure rate"`.
+- **Console Feed:** Threat Radar alerts with `"Brute-force behavior"` and `"High auth-failure rate"`.
 
 ---
 
 ### 3. API Rate Abuse / Scraping Flood
 
-Flood the order management endpoint:
+Flood the order management endpoint to simulate scraping:
 
 ```bash
-# Bash (Live Vercel / Cloud):
-for i in {1..20}; do curl -s "https://apisentinel-azure.vercel.app/api/demo/orders" > /dev/null; done
+# Bash:
+for i in {1..20}; do curl -s "https://api-sentinel-backend-s0ev.onrender.com/api/demo/orders" > /dev/null; done
 
-# PowerShell:
+# PowerShell (Windows):
 1..20 | ForEach-Object {
-    Invoke-RestMethod -Uri "https://apisentinel-azure.vercel.app/api/demo/orders" -Method GET
+    Invoke-RestMethod -Uri "https://api-sentinel-backend-s0ev.onrender.com/api/demo/orders" -Method GET
 }
 ```
-
-**Observation:**
-
-- **Status:** Ingestion records $>100$ requests within the 60-second window.
-- **Severity:** `MEDIUM` (Score: 30–45).
-- **Factor:** `"Excessive API usage"`.
 
 ---
 
 ## 🖥️ SOC Dashboard Features
 
-The frontend is an ultra-modern, frosted glass Cyber SOC interface built with Tailwind CSS, Lucide icons, and React Router:
+The frontend is an ultra-modern glassmorphism Cyber SOC console:
 
 <details open>
-<summary><b>✨ SOC Interface Highlights</b></summary>
+<summary><b>✨ SOC Console Capabilities</b></summary>
 
 1. **Dashboard Overview (`/overview`)**:
    - **Hero Threat Radar:** Dynamic SVG pulse radar displaying live system posture.
-   - **Risk Area Trend Chart:** Real-time visual timeline of aggregated risk scores over time.
-   - **Attack Vector Distribution:** Polar breakdown of active threat types (Brute-Force vs. SQLi vs. Abuse).
-   - **Active Incidents Table:** Live table with severity pills, factor chips, and one-click drilldown.
+   - **Risk Area Trend Chart:** Real-time timeline of aggregated threat scores.
+   - **Attack Vector Distribution:** Polar breakdown of threat types (Brute-Force vs. SQLi vs. Abuse).
+   - **Active Incidents Table:** Live incidents feed with severity tags and factor breakdowns.
 
-2. **Incident Drilldown Modal & Lifecycle (`/incidents`)**:
-   - Inspect IP, target endpoint, exact timestamps, and point-by-point factor contributions.
-   - Update incident lifecycle status seamlessly:
+2. **Incident Triage & Status (`/incidents`)**:
+   - Inspect client IP, target endpoint, timestamps, and mathematical factor contributions.
+   - Transition incident status with single-click actions:
      $$\text{OPEN} \longrightarrow \text{INVESTIGATING} \longrightarrow \text{RESOLVED}$$
 
-3. **Live Traffic Inspector (`/traffic`)**:
-   - Filterable stream of every recorded HTTP event with status codes, latency in ms, source IP, and user-agent string.
+3. **Live Traffic Telemetry (`/traffic`)**:
+   - Filterable stream of every HTTP request with status codes, latency in milliseconds, client IP, and user-agent string.
 
 4. **Dynamic Rules Configuration (`/rules`)**:
-   - Interactive toggles to enable/disable detection rules on the fly.
-   - Real-time threshold adjustments (e.g., adjust brute-force trigger from 5 to 10 attempts).
+   - Real-time toggles to activate/deactivate detection rules.
+   - Real-time velocity adjustments (e.g. adjust brute-force trigger threshold from 5 to 10 attempts).
 
-5. **RBAC User Management (`/users`)**:
-   - *Administrator only:* Create new analysts and viewers, inspect active credentials and creation audits.
+5. **RBAC User Administration (`/users`)**:
+   - *(Admin only)* Provision and audit team credentials for Analysts and Auditors.
 
 </details>
-
----
-
-## 🗄️ Database Schemas & Data Model
-
-```mermaid
-erDiagram
-    USERS ||--o{ USER_ROLES : "assigned"
-    ROLES ||--o{ USER_ROLES : "belongs to"
-    
-    USERS {
-        bigint id PK
-        varchar username UK
-        varchar email UK
-        varchar password_hash
-        boolean enabled
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    ROLES {
-        bigint id PK
-        varchar name UK
-        timestamp created_at
-    }
-
-    USER_ROLES {
-        bigint user_id FK
-        bigint role_id FK
-    }
-
-    API_EVENTS {
-        bigint id PK
-        varchar http_method
-        varchar endpoint
-        int status_code
-        varchar source_ip
-        text query_params
-        text request_body
-        varchar user_agent
-        bigint response_time_ms
-        timestamp timestamp
-    }
-
-    DETECTION_RULES {
-        bigint id PK
-        varchar name
-        varchar type UK
-        text description
-        int threshold
-        int time_window_seconds
-        boolean enabled
-        timestamp created_at
-    }
-
-    INCIDENTS {
-        bigint id PK
-        varchar source_ip
-        varchar endpoint
-        varchar detection_type
-        varchar severity
-        int risk_score
-        text factors
-        varchar status
-        timestamp detected_at
-        timestamp updated_at
-    }
-```
 
 ---
 
@@ -595,93 +456,54 @@ erDiagram
 
 ### Authentication & Users
 - `POST /api/auth/login` — Authenticate and receive signed HMAC-SHA384 JWT.
-- `GET /api/users` — *(ADMIN)* List all registered users and roles.
+- `GET /api/users` — *(ADMIN)* List registered accounts and roles.
 - `POST /api/users` — *(ADMIN)* Provision a new user account with role.
+- `DELETE /api/users/{id}` — *(ADMIN)* Remove user account.
 
 ### Telemetry & Incidents
-- `GET /api/dashboard/summary` — Aggregate metrics: total events, open incidents, severity counters.
-- `GET /api/incidents` — List all captured incidents, ordered by most critical/recent.
-- `GET /api/incidents/{id}` — Fetch detailed incident metadata and factor scores.
-- `PATCH /api/incidents/{id}/status` — *(ADMIN/ANALYST)* Transition status (`OPEN`, `INVESTIGATING`, `RESOLVED`).
+- `GET /api/dashboard/summary` — Aggregated metrics: total events, open incidents, risk score.
+- `GET /api/incidents` — List all captured security incidents.
+- `GET /api/incidents/{id}` — Fetch detailed incident factor breakdown.
+- `PATCH /api/incidents/{id}/status` — *(ADMIN/ANALYST)* Transition lifecycle status.
 - `GET /api/events?limit=50` — Retrieve raw incoming API telemetry logs.
 
 ### Rules Management
-- `GET /api/rules` — List all detection rules and current velocity thresholds.
-- `PATCH /api/rules/{id}/enabled` — *(ADMIN)* Toggle rule activation state.
-- `PUT /api/rules/{id}` — *(ADMIN)* Modify threshold count and time window seconds.
+- `GET /api/rules` — List active detection rules and velocity limits.
+- `PATCH /api/rules/{id}/enabled` — *(ADMIN)* Toggle rule activation.
+- `PUT /api/rules/{id}` — *(ADMIN)* Update threshold count and window seconds.
 
 ### Honeypot & Demo Simulation
-- `POST /api/demo/login` — Test login endpoint for brute-force velocity.
-- `GET /api/demo/products?search={payload}` — Test search endpoint for SQLi signatures.
-- `GET /api/demo/orders` — Test orders endpoint for rate abuse simulation.
+- `POST /api/demo/login` — Honeypot login endpoint for brute-force tests.
+- `GET /api/demo/products?search={payload}` — Product search for SQLi probes.
+- `GET /api/demo/orders` — Orders endpoint for velocity flood testing.
 
 ---
 
-## 🚀 Cloud Deployment Guide
+## 💻 Local Development Setup (Optional)
 
-API Sentinel is built for effortless zero-cost cloud deployment:
+If you wish to run API Sentinel locally on your workstation:
 
-```mermaid
-graph LR
-    User[Client Browser] -->|HTTPS| Vercel[Vercel / Netlify\nReact + Vite Frontend]
-    Vercel -->|REST + JWT| Render[Render / Railway\nSpring Boot 3 Web Service]
-    Render -->|JDBC over SSL| Supabase[(Supabase / Neon\nManaged PostgreSQL 16)]
+```bash
+# 1. Clone repository
+git clone https://github.com/MindOverFloww/apisentinel.git
+cd apisentinel
+
+# 2. Run Backend (Java 21 + Spring Boot):
+cd backend
+./mvnw spring-boot:run
+
+# 3. Run Frontend (Node.js + Vite):
+cd ../frontend
+npm install
+npm run dev
 ```
 
-| Component | Recommended Cloud Host | Setup Guide |
-|---|---|---|
-| **Database** | [Supabase](https://supabase.com) or [Neon](https://neon.tech) | Run [`seed_users.sql`](file:///c:/java%20project/Sentinel-API/backend/src/main/resources/seed_users.sql) in SQL Editor |
-| **Backend** | [Render](https://render.com) or [Railway](https://railway.app) | Set `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET` |
-| **Frontend** | [Vercel](https://vercel.com) | Set `VITE_API_BASE_URL` to your backend Render URL |
-
-*For complete step-by-step instructions with environment variable references, check the [Cloud Deployment Guide](docs/DEPLOYMENT_GUIDE.md).*
-
----
-
-## 📂 Project Directory Structure
-
-```text
-Sentinel-API/
-├── README.md                      # Comprehensive Architecture & System Guide
-├── run.bat                        # Windows One-Click Batch Launcher
-├── run.ps1                        # PowerShell Unified Process Orchestrator
-├── run.sh                         # Linux / macOS / WSL Bash Runner
-├── package.json                   # Root orchestrator scripts
-├── start-backend.bat              # Standalone Backend launcher
-├── start-frontend.bat             # Standalone Frontend launcher
-│
-├── backend/                       # Spring Boot 3 + Java 21 REST API Engine
-│   ├── src/main/java/com/sentinel/api/
-│   │   ├── config/                # SecurityConfig, AdminBootstrapRunner
-│   │   ├── controller/            # Auth, Incident, Rules, Events, Demo APIs
-│   │   ├── detection/             # DetectionResult data model
-│   │   ├── dto/                   # Request/Response data transfer objects
-│   │   ├── entity/                # ApiEvent, Incident, DetectionRule, User, Role
-│   │   ├── repository/            # Spring Data JPA repositories
-│   │   ├── security/              # JwtService, JwtFilter, CustomUserDetailsService
-│   │   └── service/               # DetectionService, RiskScoringService, IncidentService
-│   ├── src/main/resources/
-│   │   ├── application.properties # H2 / PostgreSQL and JWT configs
-│   │   └── seed_users.sql         # SQL migration script for initial users
-│   └── pom.xml                    # Maven project descriptor
-│
-├── frontend/                      # React 18 + TypeScript + Vite Cyber SOC
-│   ├── src/
-│   │   ├── components/            # Layout, Navigation, Dashboard & Incident Modals
-│   │   ├── context/               # AuthContext with auto-recovery
-│   │   ├── pages/                 # Dashboard, Incidents, Traffic, Rules, Users, Login
-│   │   ├── services/              # API Client (with offline fallback resilience)
-│   │   └── styles.css             # Glassmorphism styling & animations
-│   ├── vite.config.ts             # Vite development server & proxy config
-│   └── package.json               # Frontend dependencies & scripts
-│
-└── docs/                          # Architecture & Deployment Documentation
-    ├── DEPLOYMENT_GUIDE.md        # Cloud setup guide (Supabase + Render + Vercel)
-    └── PROJECT_SPECIFICATION.md   # Architectural roadmap and specifications
-```
+Local endpoints:
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8080` (or `8081`)
 
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by the TriByte-Org • Protecting Cloud Endpoints in Real Time</sub>
+  <sub>API Sentinel • Protecting Cloud Endpoints in Real Time • Hosted on Vercel, Netlify & Render</sub>
 </div>
