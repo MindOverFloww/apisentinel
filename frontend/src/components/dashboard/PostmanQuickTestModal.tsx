@@ -14,7 +14,7 @@ export const PostmanQuickTestModal: React.FC<PostmanQuickTestModalProps> = ({
   onSimulateAttack,
 }) => {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [targetPreset, setTargetPreset] = useState<'vercel' | 'connected' | 'localhost'>('vercel');
+  const [targetPreset, setTargetPreset] = useState<'connected' | 'localhost'>('connected');
   const [commandSyntax, setCommandSyntax] = useState<'curl' | 'powershell'>('curl');
 
   if (!isOpen) return null;
@@ -22,11 +22,9 @@ export const PostmanQuickTestModal: React.FC<PostmanQuickTestModalProps> = ({
   const connectedBase = API_BASE_URL.replace(/\/$/, '');
   
   // Resolve base URL depending on selection
-  let selectedBase = 'https://apisentinel-azure.vercel.app/api';
-  if (targetPreset === 'connected') {
-    selectedBase = connectedBase;
-  } else if (targetPreset === 'localhost') {
-    selectedBase = 'http://localhost:8081/api';
+  let selectedBase = connectedBase;
+  if (targetPreset === 'localhost') {
+    selectedBase = 'http://localhost:8080/api';
   }
 
   const testCases = [
@@ -94,18 +92,6 @@ export const PostmanQuickTestModal: React.FC<PostmanQuickTestModalProps> = ({
             <div className="inline-flex rounded-xl p-0.5 bg-black/5 dark:bg-white/10">
               <button
                 type="button"
-                onClick={() => setTargetPreset('vercel')}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all flex items-center gap-1 ${
-                  targetPreset === 'vercel'
-                    ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <Globe className="w-3 h-3" />
-                <span>Vercel (Live)</span>
-              </button>
-              <button
-                type="button"
                 onClick={() => setTargetPreset('connected')}
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all flex items-center gap-1 ${
                   targetPreset === 'connected'
@@ -114,7 +100,7 @@ export const PostmanQuickTestModal: React.FC<PostmanQuickTestModalProps> = ({
                 }`}
               >
                 <Cloud className="w-3 h-3" />
-                <span>Backend Cloud</span>
+                <span>Cloud Backend (Render)</span>
               </button>
               <button
                 type="button"

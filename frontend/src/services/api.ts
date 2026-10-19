@@ -1,6 +1,11 @@
+const RENDER_PROD_API = 'https://api-sentinel-backend-s0ev.onrender.com/api';
+const LOCAL_DEV_API = 'http://localhost:8080/api';
+
+const isLocalhost = typeof window !== 'undefined' && 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 const storedBase = typeof window !== 'undefined' ? localStorage.getItem('sentinel_api_base_url') : null;
-const isVercelHost = typeof window !== 'undefined' && (window.location.hostname.includes('vercel.app') || window.location.hostname.includes('apisentinel-azure'));
-const fallbackUrl = isVercelHost ? `${window.location.origin}/api` : 'http://localhost:8081/api';
+const fallbackUrl = isLocalhost ? LOCAL_DEV_API : RENDER_PROD_API;
 const rawApiUrl = (storedBase || import.meta.env.VITE_API_BASE_URL || fallbackUrl).trim().replace(/\/+$/, '');
 export const API_BASE_URL = rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl}/api`;
 

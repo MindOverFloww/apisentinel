@@ -81,20 +81,29 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        List<String> allowedPatterns = new java.util.ArrayList<>();
+        allowedPatterns.add("https://apisentinel-azure.vercel.app");
+        allowedPatterns.add("https://apisentinelids.netlify.app");
+        allowedPatterns.add("https://*.vercel.app");
+        allowedPatterns.add("https://*.netlify.app");
+        allowedPatterns.add("https://*.onrender.com");
+        allowedPatterns.add("http://localhost:[*]");
+        allowedPatterns.add("http://127.0.0.1:[*]");
+        allowedPatterns.add("http://localhost:*");
+        allowedPatterns.add("http://127.0.0.1:*");
+        allowedPatterns.add("*");
+
         String allowedOriginsEnv = System.getenv("ALLOWED_ORIGINS");
         if (allowedOriginsEnv != null && !allowedOriginsEnv.isBlank()) {
-            configuration.setAllowedOriginPatterns(List.of(allowedOriginsEnv.split(",")));
-        } else {
-            configuration.setAllowedOriginPatterns(List.of(
-                "http://localhost:[*]",
-                "http://127.0.0.1:[*]",
-                "https://apisentinelids.netlify.app",
-                "https://*.netlify.app",
-                "https://*.vercel.app",
-                "https://*.onrender.com",
-                "*"
-            ));
+            for (String origin : allowedOriginsEnv.split(",")) {
+                String trimmed = origin.trim();
+                if (!trimmed.isEmpty() && !allowedPatterns.contains(trimmed)) {
+                    allowedPatterns.add(trimmed);
+                }
+            }
         }
+
+        configuration.setAllowedOriginPatterns(allowedPatterns);
         configuration.setAllowedMethods(
             List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(
