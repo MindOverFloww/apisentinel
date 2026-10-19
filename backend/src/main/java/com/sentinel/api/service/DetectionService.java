@@ -63,7 +63,7 @@ public class DetectionService {
     @Transactional
     public void initDefaultRules() {
         try {
-            initRuleIfNotExists(
+            initOrUpdateRule(
                     "Brute Force Detection",
                     DetectionType.BRUTE_FORCE,
                     "Flags source IP when > 5 failed login attempts (401) occur within 60 seconds.",
@@ -71,15 +71,15 @@ public class DetectionService {
                     60
             );
 
-            initRuleIfNotExists(
+            initOrUpdateRule(
                     "Excessive API Usage / API Abuse",
                     DetectionType.API_ABUSE,
-                    "Flags client when > 100 HTTP requests are recorded from same IP within 60 seconds.",
-                    100,
+                    "Flags client when > 15 HTTP requests are recorded from same IP within 60 seconds.",
+                    15,
                     60
             );
 
-            initRuleIfNotExists(
+            initOrUpdateRule(
                     "SQL Injection-Like Pattern Detection",
                     DetectionType.SQL_INJECTION_PATTERN,
                     "Inspects query parameters and payloads for SQL injection signatures (e.g. ' OR '1'='1, UNION SELECT, DROP TABLE).",
@@ -92,11 +92,17 @@ public class DetectionService {
         }
     }
 
-    private void initRuleIfNotExists(String name, DetectionType type, String description, int threshold, int timeWindow) {
-        if (!ruleRepository.existsByType(type)) {
-            DetectionRule rule = new DetectionRule(name, type, description, threshold, timeWindow, true);
+    private void initOrUpdateRule(String name, DetectionType type, String description, int threshold, int timeWindow) {
+        DetectionRule rule = ruleRepository.findByType(type).orElse(null);
+        if (rule == null) {
+            rule = new DetectionRule(name, type, description, threshold, timeWindow, true);
             ruleRepository.save(rule);
             log.info("Seeded default detection rule: {} ({})", name, type);
+        } else if (type == DetectionType.API_ABUSE && rule.getThreshold() > 15) {
+            rule.setThreshold(threshold);
+            rule.setDescription(description);
+            ruleRepository.save(rule);
+            log.info("Synchronized detection rule threshold for {} to {}", type, threshold);
         }
     }
 

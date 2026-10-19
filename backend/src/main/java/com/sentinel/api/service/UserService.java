@@ -35,34 +35,45 @@ public class UserService {
 
     @Transactional
     public UserResponse createUser(CreateUserRequest request) {
-        if (userRepository.existsByUsername(request.username())) {
+        String cleanUsername = request.username().trim();
+        String cleanEmail = request.email().trim().toLowerCase(Locale.ROOT);
+
+        if (cleanUsername.length() < 3 || cleanUsername.length() > 100) {
             throw new ResponseStatusException(
-                HttpStatus.CONFLICT, "Username already exists"
+                HttpStatus.BAD_REQUEST, "Username must be between 3 and 100 characters"
             );
         }
 
-        if (userRepository.existsByEmail(request.email())) {
+        if (userRepository.existsByUsername(cleanUsername)) {
             throw new ResponseStatusException(
-                HttpStatus.CONFLICT, "Email already exists"
+                HttpStatus.CONFLICT, "Username '" + cleanUsername + "' already exists"
+            );
+        }
+
+        if (userRepository.existsByEmail(cleanEmail)) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT, "Email '" + cleanEmail + "' already exists"
             );
         }
 
         String roleName = request.role().trim().toUpperCase(Locale.ROOT);
+        if (roleName.startsWith("ROLE_")) {
+            roleName = roleName.substring(5);
+        }
 
         if (!List.of("ADMIN", "ANALYST", "VIEWER").contains(roleName)) {
             throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Invalid role"
+                HttpStatus.BAD_REQUEST, "Invalid role: must be ADMIN, ANALYST, or VIEWER"
             );
         }
 
-        Role role = roleRepository.findByName(roleName)
-            .orElseThrow(() -> new IllegalStateException(
-                "Required role missing from database: " + roleName
-            ));
+        final String finalRoleName = roleName;
+        Role role = roleRepository.findByName(finalRoleName)
+            .orElseGet(() -> roleRepository.save(new Role(finalRoleName)));
 
         User user = new User(
-            request.username(),
-            request.email(),
+            cleanUsername,
+            cleanEmail,
             passwordEncoder.encode(request.password())
         );
         user.addRole(role);
@@ -78,10 +89,27 @@ public class UserService {
             .toList();
     }
 
+    @Transactional
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "User not found"
+            ));
+
+        if ("admin".equalsIgnoreCase(user.getUsername())) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "The primary 'admin' account cannot be deleted"
+            );
+        }
+
+        userRepository.delete(user);
+    }
+
     private UserResponse toResponse(User user) {
         return new UserResponse(
             user.getId(),
             user.getUsername(),
+            user.getEmail(),
             user.getPrimaryRoleName(),
             user.getCreatedAt()
         );

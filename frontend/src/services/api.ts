@@ -1,4 +1,8 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
+const storedBase = typeof window !== 'undefined' ? localStorage.getItem('sentinel_api_base_url') : null;
+const isVercelHost = typeof window !== 'undefined' && (window.location.hostname.includes('vercel.app') || window.location.hostname.includes('apisentinel-azure'));
+const fallbackUrl = isVercelHost ? `${window.location.origin}/api` : 'http://localhost:8081/api';
+const rawApiUrl = (storedBase || import.meta.env.VITE_API_BASE_URL || fallbackUrl).trim().replace(/\/+$/, '');
+export const API_BASE_URL = rawApiUrl.endsWith('/api') ? rawApiUrl : `${rawApiUrl}/api`;
 
 export function getAuthToken(): string | null {
   return localStorage.getItem('sentinel_token');
@@ -48,7 +52,7 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   });
 
   if (!response.ok) {
-    if (response.status === 401 && endpoint !== '/auth/login') {
+    if (response.status === 401 && endpoint !== '/auth/login' && !endpoint.startsWith('/demo')) {
       setAuthToken(null);
       setCurrentUser(null);
       if (window.location.pathname !== '/login') {
@@ -150,6 +154,12 @@ export const apiService = {
     return request<any>('/users', {
       method: 'POST',
       body: JSON.stringify(userData),
+    });
+  },
+
+  async deleteUser(id: number | string) {
+    return request<void>(`/users/${id}`, {
+      method: 'DELETE',
     });
   },
 

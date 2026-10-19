@@ -89,7 +89,14 @@ export const IncidentsTableCard: React.FC<IncidentsTableCardProps> = ({
 
                   {/* Type */}
                   <td className="py-3.5 font-medium text-neutral-800 dark:text-neutral-200">
-                    <span className="block">{incident.title}</span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span>{incident.title}</span>
+                      {incident.requestCount && incident.requestCount > 1 ? (
+                        <span className="px-1.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-400 font-mono text-[10px] font-bold">
+                          {incident.requestCount}x hits
+                        </span>
+                      ) : null}
+                    </div>
                     <span className="text-[10px] text-neutral-400 font-mono">
                       {incident.type}
                     </span>

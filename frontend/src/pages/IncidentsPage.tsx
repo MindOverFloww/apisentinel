@@ -18,17 +18,25 @@ export const IncidentsPage: React.FC = () => {
   };
 
   const fetchIncidents = async () => {
-    setIsLoading(true);
+    if (incidents.length === 0) {
+      setIsLoading(true);
+    }
     try {
       const data = await apiService.getIncidents();
-      // Format factors and properties if stringified
-      const formatted = data.map((item: any) => ({
-        ...item,
-        id: String(item.id),
-        factors: typeof item.factors === 'string'
-          ? [{ factor: item.factors, points: item.riskScore || 20 }]
-          : item.factors || [],
-      }));
+      const formatted = (data || [])
+        .map((item: any) => ({
+          ...item,
+          id: String(item.id),
+          factors: typeof item.factors === 'string'
+            ? [{ factor: item.factors, points: item.riskScore || 20 }]
+            : item.factors || [],
+        }))
+        .sort((a: any, b: any) => {
+          const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          if (timeB !== timeA) return timeB - timeA;
+          return Number(b.id) - Number(a.id);
+        });
       setIncidents(formatted);
     } catch (err: any) {
       console.error('Failed to load incidents', err);
@@ -39,7 +47,7 @@ export const IncidentsPage: React.FC = () => {
 
   useEffect(() => {
     fetchIncidents();
-    const interval = setInterval(fetchIncidents, 8000);
+    const interval = setInterval(fetchIncidents, 2500);
     return () => clearInterval(interval);
   }, []);
 

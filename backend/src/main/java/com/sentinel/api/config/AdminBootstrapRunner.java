@@ -36,41 +36,106 @@ public class AdminBootstrapRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (username.isBlank() && password.isBlank()) {
-            System.out.println(
-                    "Admin bootstrap skipped: no bootstrap credentials configured.");
+        // Ensure standard roles exist
+        Role adminRole = getOrCreateRole("ADMIN");
+        Role analystRole = getOrCreateRole("ANALYST");
+        Role viewerRole = getOrCreateRole("VIEWER");
+
+        // Custom bootstrap credentials if provided
+        if (!username.isBlank() || !password.isBlank()) {
+            if (username.isBlank() || password.isBlank()) {
+                throw new IllegalStateException(
+                        "Set both ADMIN_BOOTSTRAP_USERNAME and ADMIN_BOOTSTRAP_PASSWORD.");
+            }
+
+            if (username.length() > 100 || password.length() < 8
+                    || password.length() > 100) {
+                throw new IllegalStateException(
+                        "Bootstrap username must be at most 100 characters; "
+                        + "password must be 8-100 characters.");
+            }
+
+            if (!userRepository.existsByUsername(username)) {
+                User admin = new User(
+                        username,
+                        email,
+                        passwordEncoder.encode(password)
+                );
+                admin.addRole(adminRole);
+                userRepository.save(admin);
+                System.out.println("Configured admin bootstrap account '" + username + "' created.");
+            }
             return;
         }
 
-        if (username.isBlank() || password.isBlank()) {
-            throw new IllegalStateException(
-                    "Set both ADMIN_BOOTSTRAP_USERNAME and ADMIN_BOOTSTRAP_PASSWORD.");
+        // Out-of-the-box seeding for immediate local / testing usage
+        User defaultAdmin = userRepository.findByUsername("admin").orElse(null);
+        if (defaultAdmin == null) {
+            User newAdmin = new User(
+                    "admin",
+                    "admin@apisentinel.local",
+                    passwordEncoder.encode("admin123")
+            );
+            newAdmin.addRole(adminRole);
+            userRepository.save(newAdmin);
+            System.out.println("Initial admin account created: admin / admin123");
+        } else {
+            defaultAdmin.setPassword(passwordEncoder.encode("admin123"));
+            defaultAdmin.setEnabled(true);
+            boolean hasAdmin = defaultAdmin.getRoles().stream()
+                    .anyMatch(r -> "ADMIN".equalsIgnoreCase(r.getName()));
+            if (!hasAdmin) {
+                defaultAdmin.addRole(adminRole);
+            }
+            userRepository.save(defaultAdmin);
+            System.out.println("Admin account verified & synchronized: admin / admin123");
         }
 
-        if (username.length() > 100 || password.length() < 8
-                || password.length() > 100) {
-            throw new IllegalStateException(
-                    "Bootstrap username must be at most 100 characters; "
-                    + "password must be 8-100 characters.");
+        User defaultAnalyst = userRepository.findByUsername("analyst").orElse(null);
+        if (defaultAnalyst == null) {
+            User newAnalyst = new User(
+                    "analyst",
+                    "analyst@apisentinel.local",
+                    passwordEncoder.encode("analyst123")
+            );
+            newAnalyst.addRole(analystRole);
+            userRepository.save(newAnalyst);
+            System.out.println("Initial analyst account created: analyst / analyst123");
+        } else {
+            defaultAnalyst.setPassword(passwordEncoder.encode("analyst123"));
+            defaultAnalyst.setEnabled(true);
+            boolean hasAnalyst = defaultAnalyst.getRoles().stream()
+                    .anyMatch(r -> "ANALYST".equalsIgnoreCase(r.getName()));
+            if (!hasAnalyst) {
+                defaultAnalyst.addRole(analystRole);
+            }
+            userRepository.save(defaultAnalyst);
         }
 
-        if (userRepository.existsByUsername(username)) {
-            System.out.println(
-                    "Admin bootstrap skipped: username already exists.");
-            return;
+        User defaultViewer = userRepository.findByUsername("viewer").orElse(null);
+        if (defaultViewer == null) {
+            User newViewer = new User(
+                    "viewer",
+                    "viewer@apisentinel.local",
+                    passwordEncoder.encode("viewer123")
+            );
+            newViewer.addRole(viewerRole);
+            userRepository.save(newViewer);
+            System.out.println("Initial viewer account created: viewer / viewer123");
+        } else {
+            defaultViewer.setPassword(passwordEncoder.encode("viewer123"));
+            defaultViewer.setEnabled(true);
+            boolean hasViewer = defaultViewer.getRoles().stream()
+                    .anyMatch(r -> "VIEWER".equalsIgnoreCase(r.getName()));
+            if (!hasViewer) {
+                defaultViewer.addRole(viewerRole);
+            }
+            userRepository.save(defaultViewer);
         }
+    }
 
-        Role adminRole = roleRepository.findByName("ADMIN")
-                .orElseThrow(() -> new IllegalStateException("ADMIN role not found in database"));
-
-        User admin = new User(
-                username,
-                email,
-                passwordEncoder.encode(password)
-        );
-        admin.addRole(adminRole);
-
-        userRepository.save(admin);
-        System.out.println("Initial admin account created.");
+    private Role getOrCreateRole(String roleName) {
+        return roleRepository.findByName(roleName)
+                .orElseGet(() -> roleRepository.save(new Role(roleName)));
     }
 }

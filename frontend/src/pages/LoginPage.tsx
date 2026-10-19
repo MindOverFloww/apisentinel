@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Shield, Lock, User, Eye, EyeOff, ArrowRight, CheckCircle2, ShieldAlert } from 'lucide-react';
-import { apiService } from '../services/api';
+import React, { useState, useEffect } from 'react';
+import { Shield, Lock, User, Eye, EyeOff, ArrowRight, CheckCircle2, Server, Check, AlertCircle, RefreshCw } from 'lucide-react';
+import { apiService, API_BASE_URL } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 interface LoginPageProps {
@@ -10,12 +10,20 @@ interface LoginPageProps {
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigateHome }) => {
   const { login } = useAuth();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('admin');
+  const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState<{ text: string; isError: boolean } | null>(null);
+
+  // Backend URL configuration modal / inline state
+  const [showApiConfig, setShowApiConfig] = useState(false);
+  const [customApiUrl, setCustomApiUrl] = useState(() => {
+    return localStorage.getItem('sentinel_api_base_url') || import.meta.env.VITE_API_BASE_URL || API_BASE_URL;
+  });
+  const [testStatus, setTestStatus] = useState<{ text: string; success: boolean } | null>(null);
+  const [isTesting, setIsTesting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +33,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
     try {
       const authUser = await login(username, password);
       setIsLoading(false);
-      setStatusMessage(`Authenticated as ${authUser.username} (${authUser.role})`);
+      setStatusMessage({ text: `Authenticated as ${authUser.username} (${authUser.role})`, isError: false });
       setTimeout(() => {
         if (onLoginSuccess) {
           onLoginSuccess(authUser.role);
@@ -35,8 +43,46 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
       }, 400);
     } catch (err: any) {
       setIsLoading(false);
-      setStatusMessage(err.message || 'Login failed');
+      setStatusMessage({ text: err.message || 'Login failed. Verify backend connectivity and credentials.', isError: true });
     }
+  };
+
+  const handleTestConnection = async () => {
+    setIsTesting(true);
+    setTestStatus(null);
+    const target = customApiUrl.trim().replace(/\/+$/, '');
+    const pingUrl = target.endsWith('/api') ? `${target}/demo/products` : `${target}/api/demo/products`;
+    try {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), 6000);
+      const res = await fetch(pingUrl, { signal: controller.signal });
+      clearTimeout(id);
+      if (res.ok) {
+        setTestStatus({ text: `Connected! Backend online (${res.status})`, success: true });
+      } else {
+        setTestStatus({ text: `Backend returned HTTP ${res.status}`, success: false });
+      }
+    } catch (err: any) {
+      setTestStatus({ text: `Cannot reach backend: ${err.message || 'Network error'}`, success: false });
+    } finally {
+      setIsTesting(false);
+    }
+  };
+
+  const handleSaveApiUrl = () => {
+    const formatted = customApiUrl.trim().replace(/\/+$/, '');
+    if (!formatted) {
+      localStorage.removeItem('sentinel_api_base_url');
+    } else {
+      localStorage.setItem('sentinel_api_base_url', formatted);
+    }
+    window.location.reload();
+  };
+
+  const handleSelectCredential = (user: string, pass: string) => {
+    setUsername(user);
+    setPassword(pass);
+    setStatusMessage(null);
   };
 
   return (
@@ -69,6 +115,36 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
               Authentication endpoints are continuously audited. Every request is verified with Spring Security JWT tokens and BCrypt cryptographic salted hashes.
             </p>
 
+            {/* Quick Test Role Presets */}
+            <div className="mb-6 p-3.5 rounded-2xl bg-white/[0.04] border border-white/10">
+              <div className="text-[10px] text-neutral-400 font-medium uppercase tracking-wider mb-2">
+                Evaluator Quick Logins
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleSelectCredential('admin', 'admin123')}
+                  className="px-2 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[11px] font-medium text-white transition-all text-center"
+                >
+                  Admin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectCredential('analyst', 'analyst123')}
+                  className="px-2 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[11px] font-medium text-white transition-all text-center"
+                >
+                  Analyst
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSelectCredential('viewer', 'viewer123')}
+                  className="px-2 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[11px] font-medium text-white transition-all text-center"
+                >
+                  Viewer
+                </button>
+              </div>
+            </div>
+
             <div className="space-y-3 mb-6">
               <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10">
                 <div className="text-[10px] text-neutral-400 font-medium uppercase tracking-wider">
@@ -81,10 +157,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
 
               <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10">
                 <div className="text-[10px] text-neutral-400 font-medium uppercase tracking-wider">
-                  Cryptographic Standard
+                  Database & Cloud Target
                 </div>
-                <div className="text-xs font-semibold text-white mt-0.5 font-mono">
-                  HMAC-SHA384 JWT + BCrypt Salt
+                <div className="text-xs font-semibold text-white mt-0.5 font-mono truncate">
+                  Supabase PostgreSQL + Render
                 </div>
               </div>
             </div>
@@ -104,20 +180,85 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
               <span className="text-[11px] font-bold tracking-widest uppercase text-neutral-500 dark:text-neutral-400">
                 Console Authentication
               </span>
+              <button
+                type="button"
+                onClick={() => setShowApiConfig(!showApiConfig)}
+                className="flex items-center gap-1.5 text-[11px] text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                title="Configure Backend API URL"
+              >
+                <Server className="w-3.5 h-3.5" />
+                <span className="font-mono text-[10px]">API Target</span>
+              </button>
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-extralight tracking-tight text-neutral-900 dark:text-white mb-2">
               Sign In
             </h1>
-            <p className="text-xs text-neutral-600 dark:text-neutral-400 font-light mb-6">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 font-light mb-4">
               Enter your registered username and password to access the Sentinel console.
             </p>
 
+            {/* Backend URL Configuration Box */}
+            {showApiConfig && (
+              <div className="mb-5 p-3.5 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] border border-black/10 dark:border-white/15 animate-fade-slide text-xs">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-neutral-800 dark:text-neutral-200 flex items-center gap-1.5">
+                    <Server className="w-3.5 h-3.5" /> Render / Backend Endpoint
+                  </span>
+                  <span className="text-[10px] font-mono text-neutral-400">Live API</span>
+                </div>
+                <input
+                  type="text"
+                  value={customApiUrl}
+                  onChange={(e) => setCustomApiUrl(e.target.value)}
+                  placeholder="https://your-service.onrender.com/api"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-black/30 border border-black/10 dark:border-white/20 text-xs font-mono mb-2 text-neutral-900 dark:text-white"
+                />
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={handleSaveApiUrl}
+                      className="px-3 py-1.5 rounded-xl bg-black text-white dark:bg-white dark:text-black font-medium text-[11px] flex items-center gap-1"
+                    >
+                      <Check className="w-3 h-3" /> Save & Connect
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleTestConnection}
+                      disabled={isTesting}
+                      className="px-3 py-1.5 rounded-xl bg-neutral-200 dark:bg-white/10 hover:bg-neutral-300 font-medium text-[11px] flex items-center gap-1 text-neutral-800 dark:text-neutral-200"
+                    >
+                      <RefreshCw className={`w-3 h-3 ${isTesting ? 'animate-spin' : ''}`} />
+                      {isTesting ? 'Testing...' : 'Test Ping'}
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      localStorage.removeItem('sentinel_api_base_url');
+                      setCustomApiUrl(API_BASE_URL);
+                      window.location.reload();
+                    }}
+                    className="text-[10px] text-neutral-400 hover:underline"
+                  >
+                    Reset
+                  </button>
+                </div>
+                {testStatus && (
+                  <div className={`mt-2 p-2 rounded-xl text-[11px] font-medium flex items-center gap-1.5 ${testStatus.success ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'}`}>
+                    {testStatus.success ? <Check className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
+                    <span>{testStatus.text}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Status Toast */}
             {statusMessage && (
-              <div className="mb-4 flex items-center gap-2 p-2.5 rounded-2xl bg-black text-white dark:bg-white dark:text-black text-xs font-medium shadow-sm animate-fade-slide">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>{statusMessage}</span>
+              <div className={`mb-4 flex items-center gap-2 p-2.5 rounded-2xl text-xs font-medium shadow-sm animate-fade-slide ${statusMessage.isError ? 'bg-rose-500/15 border border-rose-500/20 text-rose-700 dark:text-rose-300' : 'bg-black text-white dark:bg-white dark:text-black'}`}>
+                {statusMessage.isError ? <AlertCircle className="w-3.5 h-3.5" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+                <span>{statusMessage.text}</span>
               </div>
             )}
 
@@ -170,7 +311,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
                 </div>
               </div>
 
-              {/* Remember me & Forgot */}
+              {/* Remember me & Indicator */}
               <div className="flex items-center justify-between text-xs pt-1">
                 <label className="flex items-center gap-2 cursor-pointer text-neutral-600 dark:text-neutral-400">
                   <input
@@ -181,7 +322,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
                   />
                   <span className="text-[11px]">Remember credentials</span>
                 </label>
-                <span className="text-[11px] text-neutral-400 font-mono">BTech Evaluator Access</span>
+                <button
+                  type="button"
+                  onClick={() => setShowApiConfig(!showApiConfig)}
+                  className="text-[10px] text-neutral-500 hover:underline font-mono truncate max-w-[180px]"
+                >
+                  {API_BASE_URL}
+                </button>
               </div>
 
               {/* Submit button */}
@@ -203,7 +350,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
           </div>
 
           <div className="mt-6 pt-4 border-t border-black/10 dark:border-white/10 flex items-center justify-between text-[11px] text-neutral-400">
-            <span>Single-Sign-On: Disabled</span>
+            <span>Target: <span className="font-mono text-neutral-600 dark:text-neutral-300">{API_BASE_URL}</span></span>
             <span className="font-mono text-[10px]">Version 1.4.0</span>
           </div>
         </div>

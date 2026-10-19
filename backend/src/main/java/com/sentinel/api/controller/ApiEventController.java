@@ -22,8 +22,9 @@ public class ApiEventController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'ANALYST', 'VIEWER')")
-    public ResponseEntity<List<ApiEventResponse>> getAllEvents() {
-        List<ApiEventResponse> events = apiEventService.getAllEvents().stream()
+    public ResponseEntity<List<ApiEventResponse>> getAllEvents(
+            @RequestParam(name = "limit", defaultValue = "100") int limit) {
+        List<ApiEventResponse> events = apiEventService.getRecentEvents(limit).stream()
                 .map(ApiEventResponse::fromEntity)
                 .toList();
         return ResponseEntity.ok(events);

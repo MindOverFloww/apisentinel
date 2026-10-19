@@ -129,9 +129,7 @@ public class User {
             .map(Role::getName)
             .sorted()
             .findFirst()
-            .orElseThrow(() ->
-                new IllegalStateException("User has no assigned role")
-            );
+            .orElse("VIEWER");
     }
 
     public boolean hasRole(String roleName) {

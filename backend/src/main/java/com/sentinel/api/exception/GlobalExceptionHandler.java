@@ -40,6 +40,12 @@ public class GlobalExceptionHandler {
                 ex.getReason() == null ? "Request failed" : ex.getReason());
     }
 
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrity(
+            org.springframework.dao.DataIntegrityViolationException ex) {
+        return error(HttpStatus.CONFLICT, "A user or entity with these unique details already exists.");
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGeneralException(Exception ex) {
         ex.printStackTrace();

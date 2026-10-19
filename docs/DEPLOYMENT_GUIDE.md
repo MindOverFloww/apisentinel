@@ -68,22 +68,33 @@ graph LR
    * **Build Command:** `npm run build`
    * **Output Directory:** `dist`
 4. Under **Environment Variables**, add:
-   * `VITE_API_BASE_URL` = `https://api-sentinel-backend.onrender.com/api`
+   * `VITE_API_BASE_URL` = `https://<your-render-service>.onrender.com/api` (or your cloud backend API endpoint)
 5. Click **Deploy**.
-6. Vercel will give you a public URL (e.g. `https://api-sentinel.vercel.app`).
+6. Vercel deployment URL:
+   * **Live Vercel Application:** `https://apisentinel-azure.vercel.app`
 
 ---
 
-## Step 4: Verification
+## Step 4: Verification & Live Attack Simulation
 
-1. Open your Vercel URL in your browser.
-2. The sign-in page will load directly.
-3. Log in with:
-   * **Username:** `admin`
-   * **Password:** `admin123`
-4. Navigate to **Traffic**, **Incidents**, and **Rules** to see live synchronization across the cloud database.
-5. In terminal, test a cloud attack simulation:
+1. Open `https://apisentinel-azure.vercel.app` in your browser.
+2. Sign in with initialized credentials:
+   * **Admin:** `admin` / `admin123`
+   * **Analyst:** `analyst` / `analyst123`
+   * **Viewer:** `viewer` / `viewer123`
+3. If connecting to a cloud backend, configure your Render service endpoint in the **Render / Backend Endpoint** box on the login screen or top navigation bar.
+4. Run live attack simulations from your terminal targeting `https://apisentinel-azure.vercel.app`:
    ```bash
-   curl "https://api-sentinel-backend.onrender.com/api/demo/products?search=%27%20OR%20%271%27=%271"
+   # 1. SQL Injection Simulation
+   curl "https://apisentinel-azure.vercel.app/api/demo/products?search=%27%20OR%20%271%27=%271"
+
+   # 2. Brute-Force Authentication Test
+   curl -X POST https://apisentinel-azure.vercel.app/api/demo/login \
+     -H "Content-Type: application/json" \
+     -d '{"username":"admin","password":"invalid_password"}'
+
+   # 3. API Abuse / Rate Flooding Test
+   for i in {1..20}; do curl -s "https://apisentinel-azure.vercel.app/api/demo/orders" > /dev/null; done
    ```
-   Check your live Vercel dashboard — the SQL injection incident will pop up immediately!
+5. Check your live dashboard — incidents and traffic will update automatically in real time!
+

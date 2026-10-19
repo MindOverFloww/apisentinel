@@ -45,13 +45,20 @@ export const DashboardPage: React.FC = () => {
         setSummary(sum);
       }
 
-      const formattedIncidents: Incident[] = (incs || []).map((item: any) => ({
-        ...item,
-        id: String(item.id),
-        factors: typeof item.factors === 'string'
-          ? [{ factor: item.factors, points: item.riskScore || 20 }]
-          : item.factors || [],
-      }));
+      const formattedIncidents: Incident[] = (incs || [])
+        .map((item: any) => ({
+          ...item,
+          id: String(item.id),
+          factors: typeof item.factors === 'string'
+            ? [{ factor: item.factors, points: item.riskScore || 20 }]
+            : item.factors || [],
+        }))
+        .sort((a: any, b: any) => {
+          const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          if (timeB !== timeA) return timeB - timeA;
+          return Number(b.id) - Number(a.id);
+        });
 
       setIncidents(formattedIncidents);
     } catch (err) {
@@ -61,7 +68,7 @@ export const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     loadDashboardData();
-    const interval = setInterval(loadDashboardData, 8000);
+    const interval = setInterval(loadDashboardData, 2500);
     return () => clearInterval(interval);
   }, []);
 
@@ -82,22 +89,31 @@ export const DashboardPage: React.FC = () => {
   };
 
   const handleSimulateAttack = async (type: 'BRUTE_FORCE' | 'SQL_INJECTION' | 'API_ABUSE') => {
-    showToast(`Injecting test traffic to backend: ${type}`);
+    showToast(`Injecting test traffic to backend: ${type}...`);
     try {
       if (type === 'BRUTE_FORCE') {
-        for (let i = 0; i < 6; i++) {
-          await apiService.simulateDemoLogin({ username: 'admin', password: 'bad_pwd_' + i }).catch(() => {});
+        const promises = [];
+        for (let i = 0; i < 7; i++) {
+          promises.push(
+            apiService.simulateDemoLogin({ username: 'admin', password: 'bad_pwd_' + i }).catch(() => {})
+          );
         }
+        await Promise.all(promises);
       } else if (type === 'SQL_INJECTION') {
         await apiService.simulateProductsRequest("' OR '1'='1").catch(() => {});
       } else if (type === 'API_ABUSE') {
-        for (let i = 0; i < 15; i++) {
-          await apiService.simulateOrdersRequest().catch(() => {});
+        const promises = [];
+        for (let i = 0; i < 25; i++) {
+          promises.push(apiService.simulateOrdersRequest().catch(() => {}));
         }
+        await Promise.all(promises);
       }
-      setTimeout(loadDashboardData, 1200);
-    } catch (err) {
-      // Backend evaluated
+      await loadDashboardData();
+      setTimeout(loadDashboardData, 600);
+      setTimeout(loadDashboardData, 1500);
+      showToast(`🚨 ${type} simulated! Telemetry & Incident Register updated.`);
+    } catch (err: any) {
+      showToast(err.message || 'Simulation failed');
     }
     setIsPostmanModalOpen(false);
   };

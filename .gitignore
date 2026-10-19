@@ -17,6 +17,10 @@ backend/.settings/
 backend/*.log
 backend/.env
 backend/.env.*
+backend/data/
+data/
+*.mv.db
+*.trace.db
 
 # OS
 .DS_Store
@@ -28,3 +32,6 @@ Thumbs.db
 
 # General
 *.log
+push
+inspect_live.py
+

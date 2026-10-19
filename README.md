@@ -425,11 +425,14 @@ Sentinel contains a built-in interactive honeypot/simulation controller ([`DemoC
 Inject a tautological SQL exploit into the catalog search:
 
 ```bash
-# cURL
-curl "http://localhost:8080/api/demo/products?search=%27%20OR%20%271%27=%271"
+# Live Vercel Endpoint:
+curl "https://apisentinel-azure.vercel.app/api/demo/products?search=%27%20OR%20%271%27=%271"
+
+# Localhost Endpoint:
+curl "http://localhost:8081/api/demo/products?search=%27%20OR%20%271%27=%271"
 
 # Or UNION SELECT attack:
-curl "http://localhost:8080/api/demo/products?search=1%20UNION%20SELECT%20null,username,password%20FROM%20users--"
+curl "https://apisentinel-azure.vercel.app/api/demo/products?search=1%20UNION%20SELECT%20null,username,password%20FROM%20users--"
 ```
 
 **Observation:**
@@ -444,16 +447,16 @@ curl "http://localhost:8080/api/demo/products?search=1%20UNION%20SELECT%20null,u
 Run a rapid burst of failed credential attempts against the demo authentication gateway:
 
 ```bash
-# Linux / macOS / Git Bash:
+# Linux / macOS / Git Bash (Live Vercel / Cloud):
 for i in {1..7}; do
-  curl -s -X POST http://localhost:8080/api/demo/login \
+  curl -s -X POST https://apisentinel-azure.vercel.app/api/demo/login \
        -H "Content-Type: application/json" \
        -d '{"username":"admin","password":"wrong_password_'$i'"}'
 done
 
 # PowerShell (Windows):
 1..7 | ForEach-Object {
-    Invoke-RestMethod -Uri "http://localhost:8080/api/demo/login" -Method POST `
+    Invoke-RestMethod -Uri "https://apisentinel-azure.vercel.app/api/demo/login" -Method POST `
         -ContentType "application/json" -Body "{`"username`":`"admin`",`"password`":`"bad_pass_$_`"}" `
         -SkipHttpErrorCheck
 }
@@ -471,13 +474,17 @@ done
 Flood the order management endpoint:
 
 ```bash
+# Bash (Live Vercel / Cloud):
+for i in {1..20}; do curl -s "https://apisentinel-azure.vercel.app/api/demo/orders" > /dev/null; done
+
 # PowerShell:
-1..105 | ForEach-Object {
-    Invoke-RestMethod -Uri "http://localhost:8080/api/demo/orders" -Method GET
+1..20 | ForEach-Object {
+    Invoke-RestMethod -Uri "https://apisentinel-azure.vercel.app/api/demo/orders" -Method GET
 }
 ```
 
 **Observation:**
+
 - **Status:** Ingestion records $>100$ requests within the 60-second window.
 - **Severity:** `MEDIUM` (Score: 30–45).
 - **Factor:** `"Excessive API usage"`.

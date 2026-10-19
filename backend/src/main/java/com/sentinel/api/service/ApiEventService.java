@@ -63,6 +63,15 @@ public class ApiEventService {
     }
 
     public List<ApiEvent> getAllEvents() {
-        return apiEventRepository.findAll();
+        return apiEventRepository.findAll(org.springframework.data.domain.Sort.by(
+                org.springframework.data.domain.Sort.Direction.DESC, "id"));
+    }
+
+    public List<ApiEvent> getRecentEvents(int limit) {
+        int safeLimit = Math.min(Math.max(limit, 1), 500);
+        return apiEventRepository.findAll(
+                org.springframework.data.domain.PageRequest.of(0, safeLimit,
+                        org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "id"))
+        ).getContent();
     }
 }
