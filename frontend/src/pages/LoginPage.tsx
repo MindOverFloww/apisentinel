@@ -10,8 +10,8 @@ interface LoginPageProps {
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigateHome }) => {
   const { login } = useAuth();
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
@@ -79,12 +79,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
     window.location.reload();
   };
 
-  const handleSelectCredential = (user: string, pass: string) => {
-    setUsername(user);
-    setPassword(pass);
-    setStatusMessage(null);
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8 relative overflow-hidden animate-fade-slide">
       {/* Background ambient diffuse white light glow */}
@@ -114,36 +108,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess, onNavigate
             <p className="text-xs text-neutral-400 font-light leading-relaxed mb-6">
               Authentication endpoints are continuously audited. Every request is verified with Spring Security JWT tokens and BCrypt cryptographic salted hashes.
             </p>
-
-            {/* Quick Test Role Presets */}
-            <div className="mb-6 p-3.5 rounded-2xl bg-white/[0.04] border border-white/10">
-              <div className="text-[10px] text-neutral-400 font-medium uppercase tracking-wider mb-2">
-                Evaluator Quick Logins
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleSelectCredential('admin', 'admin123')}
-                  className="px-2 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[11px] font-medium text-white transition-all text-center"
-                >
-                  Admin
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSelectCredential('analyst', 'analyst123')}
-                  className="px-2 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[11px] font-medium text-white transition-all text-center"
-                >
-                  Analyst
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleSelectCredential('viewer', 'viewer123')}
-                  className="px-2 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[11px] font-medium text-white transition-all text-center"
-                >
-                  Viewer
-                </button>
-              </div>
-            </div>
 
             <div className="space-y-3 mb-6">
               <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10">

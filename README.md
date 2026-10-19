@@ -76,7 +76,7 @@ API Sentinel ships with pre-configured role-based test accounts:
 ```
 
 > [!TIP]
-> The live console login page features **Evaluator Quick Logins** (`Admin`, `Analyst`, `Viewer`). Clicking any chip automatically pre-fills the credentials and connects directly to the Render cloud backend!
+> Use the test accounts above to sign in and explore role-based permissions in the Sentinel console.
 
 ---
 
