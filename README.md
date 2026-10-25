@@ -39,6 +39,7 @@
 > **API Sentinel** is an enterprise-grade API Security & Intrusion Detection System (IDS) deployed in the cloud. It intercepts incoming REST traffic, extracts granular security metadata, detects active threats using deterministic velocity and signature rules, evaluates composite mathematical risk scores (0–100), and provides an ultra-low latency glassmorphism SOC dashboard for incident triage.
 
 ---
+### Documentations - https://drive.google.com/drive/folders/1TSPrNRYqvjIZmGpoQ0-AgNAlPjnZDY3J?usp=drive_link
 
 ## 🌐 Live Cloud Deployments
 
